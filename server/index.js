@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // Routes
-app.use('/api/data', require('./routes/data'))
+app.use('/api/course', require('./routes/data'))
 app.use('/api', require('./routes/register'))
 app.use('/api', require('./routes/auth'))
 app.use('/api/course', require('./routes/courses'))

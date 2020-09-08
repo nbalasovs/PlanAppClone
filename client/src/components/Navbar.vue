@@ -6,11 +6,14 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item" v-if="$store.state.isAuthenticated">
-          <a href="#" v-on:click.prevent="addYear()" v-if="$store.state.isAuthenticated" class="nav-link">Add Year</a>
+        <li class="nav-item" v-if="$store.state.isAuthenticated && isHomeRoute">
+          <a href="#" v-on:click.prevent="addYear()" class="nav-link">Add Year</a>
         </li>
         <li class="nav-item" v-if="$store.state.isAuthenticated">
-          <a href="#" v-on:click.prevent="userLogout" v-if="$store.state.isAuthenticated" class="nav-link">Logout</a>
+          <a href="#" v-on:click.prevent="userLogout" class="nav-link">Logout</a>
+        </li>
+        <li class="nav-item" v-if="$store.state.isAuthenticated">
+          <a href="#" class="nav-link" v-on:click="emitToParent">CHECK</a>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
@@ -24,24 +27,30 @@
 
 <script>
 import {logout} from '../services/AuthServices'
-import axios from 'axios'
+import Grid from '@/components/Grid.vue'
 
 export default {
   name: 'Navbar',
+  data() {
+    return {
+      components: []
+    }
+  },
   methods: {
     userLogout: function() {
       logout()
     },
+    emitToParent() {
+      if(this.components.length < 5) {
+        this.components.push(Grid)
+        this.$emit('childToParent', this.components)
+        this.makeToast('Year was successfully added')
+      } else {
+        this.makeToast('You have exceeded maxiumum number of available years')
+      }      
+    },
     addYear: function() {
-      axios.post('http://localhost:3000/api/data/year/add', {
-        userId: this.$store.state.userId
-      }).then((res) => {
-        if(res.status === 201) {
-          this.makeToast('Year was added')
-        } else {
-          this.makeToast('Maximum amount of years was exceeded')
-        }
-      }).catch(err => console.log(err))
+      
     },
     makeToast(message) {
       this.$bvToast.toast(message, {

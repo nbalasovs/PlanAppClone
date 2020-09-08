@@ -2,7 +2,6 @@ const {Router} = require('express')
 const router = Router()
 const User = require('../models/user')
 const Course = require('../models/course')
-const mongoose = require('mongoose')
 
 router.get('/:id', (req, res) => {
   User.findById(req.params.id, (err, data) => {
@@ -22,21 +21,6 @@ router.get('/:id', (req, res) => {
       }
       res.status(200).json(arr)
     })
-  })
-})
-
-router.post('/year/add', (req, res) => {
-  User.findById(req.body.userId, (err, data) => {
-    if(err) console.log(err)
-    const grid = data.grid.years
-
-    if(grid.length < 5) {
-      grid.push(Array())
-      User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.body.userId) }, { grid : { years: grid } }, { new: true }, err => err )
-      return res.status(201).json()
-    }
-
-    res.status(204).json()
   })
 })
 
