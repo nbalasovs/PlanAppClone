@@ -20,7 +20,7 @@
 
 <script>
 import Grid from '@/components/Grid'
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   name: 'Home',
@@ -54,19 +54,26 @@ export default {
         c: name
       })
     },
+    makeToast() {
+      this.$bvToast.toast('Year was added', {
+        title: 'Message',
+        autoHideDelay: 5000,
+        appendToast: true
+      })
+    },
     async fetchData() {
-      const courses = await axios.get('http://localhost:3000/api/data/' + this.$store.state.userId, {
-        headers: {}
-      })
-      const grid = await axios.get('http://localhost:3000/api/data/grid/' + this.$store.state.userId, {
-        headers: {}
-      })
-      console.log(typeof(grid.data.nYear[0].state))
-      this.courses = courses.data
-      this.grid = grid.data
-      for(let i = 0; i < this.grid.nYear.length; i++) {
-        this.components.push(Grid)
-      }
+      // const courses = await axios.get('http://localhost:3000/api/data/' + this.$store.state.userId, {
+      //   headers: {}
+      // })
+      // const grid = await axios.get('http://localhost:3000/api/data/grid/' + this.$store.state.userId, {
+      //   headers: {}
+      // })
+
+      // this.courses = courses.data
+      // this.grid = grid.data
+      // for(let i = 0; i < this.grid.nYear.length; i++) {
+      //   this.components.push(Grid)
+      // }
     }
   }
 }

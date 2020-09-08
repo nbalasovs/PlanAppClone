@@ -28,15 +28,15 @@ router.get('/:id', (req, res) => {
 router.post('/year/add', (req, res) => {
   User.findById(req.body.userId, (err, data) => {
     if(err) console.log(err)
-    const grid = data.grid.nYear
+    const grid = data.grid.years
 
-    if(grid.length < 6) {
+    if(grid.length < 5) {
       grid.push(Array())
-      User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.body.userId) }, { grid : { nYear: grid } }, { new: true }, err => err )
+      User.findOneAndUpdate({ _id: mongoose.Types.ObjectId(req.body.userId) }, { grid : { years: grid } }, { new: true }, err => err )
       return res.status(201).json()
     }
 
-    res.status(500).json()
+    res.status(204).json()
   })
 })
 

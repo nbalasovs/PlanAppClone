@@ -42,13 +42,14 @@ const userSchema = Schema({
     }],
   },
   grid: {
-    nYear: [{
+    years: [{
       state: [{
         x: Number,
         y: Number,
         w: Number,
         h: Number,
-        i: Number
+        i: String,
+        c: String
       }]
     }]
   }

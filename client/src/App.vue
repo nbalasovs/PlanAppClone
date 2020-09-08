@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar v-if="this.$route.name !== 'Login'" />
+    <Navbar v-if="this.$route.name !== 'Login'" :isHomeRoute="isHomeRoute()" />
     <router-view/>
   </div>
 </template>
@@ -14,10 +14,8 @@ export default {
     Navbar
   },
   methods: {
-    isLoginRoute: function() {
-      const currentRoute = this.$route.name
-      console.log(currentRoute)
-      return currentRoute === 'Login'
+    isHomeRoute: function() {
+      return this.$route.name === 'Home'
     }
   },
   beforeCreate: function() {
