@@ -20,3 +20,7 @@
   background: #ccc;
   border: 1px solid black;
 }
+
+.custom-menu div {
+  display: grid;
+}
