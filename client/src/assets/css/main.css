@@ -1,0 +1,22 @@
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.login-img {
+  text-align-last: center;
+}
+
+.logo {
+  object-fit: cover;
+  width: 300px;
+  height: 200px;
+}
+
+.vue-grid-item:not(.vue-grid-placeholder) {
+  background: #ccc;
+  border: 1px solid black;
+}
