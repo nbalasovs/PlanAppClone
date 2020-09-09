@@ -10,7 +10,7 @@
           <a href="#" class="nav-link" v-on:click="addYear">Add Year</a>
         </li>
         <li class="nav-item" v-if="$store.state.isAuthenticated && isHomeRoute">
-          <a href="#" class="nav-link">Save</a>
+          <a href="#" class="nav-link" v-on:click="saveLayout">Save</a>
         </li>
       </ul>
       <ul class="navbar-nav ml-auto">
@@ -28,6 +28,7 @@
 <script>
 import {logout} from '../services/AuthServices'
 import Grid from '@/components/Grid.vue'
+import axios from 'axios'
 
 export default {
   name: 'Navbar',
@@ -43,6 +44,13 @@ export default {
     userLogout: function() {
       logout()
     },
+    saveLayout: async function() {
+      console.log(this.components)
+      await axios.post('http://localhost:3000/api/course/grid/save', {
+        userId: this.$store.state.userId,
+        yearsObj: this.components.years
+      })
+    },
     addYear: function() {
       if(this.components.gridComponents.length < 5) {
         this.components.gridComponents.push(Grid)
@@ -52,6 +60,9 @@ export default {
       } else {
         this.makeToast('You have exceeded maxiumum number of available years')
       }      
+    },
+    loadGrid: function() {
+      
     },
     makeToast: function(message) {
       this.$bvToast.toast(message, {

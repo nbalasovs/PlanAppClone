@@ -10,7 +10,6 @@
       :vertical-compact="true"
       :margin="[10, 10]"
       :use-css-transforms="true"
-      @layout-updated="layoutUpdatedEvent"
       >
       <grid-item v-for="item in layout"
         :maxH="1"
@@ -31,17 +30,6 @@ import VueGridLayout from 'vue-grid-layout'
 
 export default {
   name: 'Grid',
-  data() {
-    return {
-      eventLog: []
-    }
-  },
-  methods: {
-    layoutUpdatedEvent: function(newLayout){  
-      this.eventLog.push("Updated layout")
-      console.log("Updated layout: ", newLayout)
-    }
-  },
   components: {
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem

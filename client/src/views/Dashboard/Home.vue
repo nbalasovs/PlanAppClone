@@ -2,27 +2,28 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-9">
-        <component v-for="(component, idx) in componentObj.gridComponents" 
+        <component v-for="(component, idx) in componentObj.gridComponents"
                    :key="idx" :is="component" :layout="componentObj.years[idx].state" :yearGrid="idx + 1" />
-      </div>
-      <div class="col-md-3">
-        <div class="pt-5">
-          <div v-for="(course, idx) in courses" :key="idx" class="pb-2">
-            <b-button v-b-toggle="'collapse-' + idx" class="btn-block">
-            {{ course.data.name }}
-            </b-button>
-            <b-collapse v-bind:id="'collapse-' + idx" class="mt-2" v-if="Object.keys(componentObj).length !== 0">
-              <b-card class="custom-menu">
-                <div v-for="(year, idx) in componentObj.years" :key="idx" class="mb-2">
-                  <b-button v-on:click="addCourse(course.data._id, 
-                    course.data.name, course.data.block, course.spec.isPassed, idx)">
-                    Add to year {{ idx + 1 }}
-                  </b-button>
-                </div>
-              </b-card>
-            </b-collapse>
+        <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button>
+        <b-sidebar id="sidebar-right" title="Courses" right shadow>
+          <div class="px-3 py-2">
+            <div v-for="(course, idx) in courses" :key="idx" class="pb-2">
+              <b-button v-b-toggle="'collapse-' + idx" class="btn-block">
+              {{ course.data.name }}
+              </b-button>
+              <b-collapse v-bind:id="'collapse-' + idx" class="mt-2" v-if="Object.keys(componentObj).length !== 0">
+                <b-card class="custom-menu">
+                  <div v-for="(year, idx) in componentObj.years" :key="idx" class="mb-2">
+                    <b-button v-on:click="addCourse(course.data._id, 
+                      course.data.name, course.data.block, course.spec.isPassed, idx)">
+                      Add to year {{ idx + 1 }}
+                    </b-button>
+                  </div>
+                </b-card>
+              </b-collapse>
+            </div>
           </div>
-        </div>
+        </b-sidebar>
       </div>
     </div>
   </div>
