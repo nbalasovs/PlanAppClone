@@ -42,7 +42,7 @@ router.post('/grid/save', (req, res) => {
 router.get('/grid/:id', (req, res) => {
   User.findById(req.params.id, (err, data) => {
     if(err) console.log(err)
-    return res.status(200).json(data.grid)
+    return res.status(200).json(data.grid.years)
   })
 })
 

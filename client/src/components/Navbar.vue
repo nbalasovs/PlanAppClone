@@ -40,6 +40,9 @@ export default {
       }
     }
   },
+  created() {
+    this.loadGrid()
+  },
   methods: {
     userLogout: function() {
       logout()
@@ -61,8 +64,17 @@ export default {
         this.makeToast('You have exceeded maxiumum number of available years')
       }      
     },
-    loadGrid: function() {
-      
+    loadGrid: async function() {
+      const years = await axios.get('http://localhost:3000/api/course/grid/' + this.$store.state.userId, {
+        headers: {}
+      })
+      if(years.data.length > 0) {
+        for(let i = 0; i < years.data.length; i++) {
+          this.components.gridComponents.push(Grid)
+        }
+        this.components.years = years.data
+        this.$emit('childToParent', this.components)
+      } 
     },
     makeToast: function(message) {
       this.$bvToast.toast(message, {
