@@ -4,7 +4,11 @@
       <div class="col-md-12">
         <component v-for="(component, idx) in componentObj.gridComponents"
                    :key="idx" :is="component" :layout="componentObj.years[idx].state" :yearGrid="idx + 1" />
-        <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button>
+        <div class="fab">
+          <span class="fab-action-button" v-b-toggle.sidebar-right>
+            <i class="fab-action-button__icon"></i>
+          </span>
+        </div>
         <b-sidebar id="sidebar-right" title="Courses" right shadow>
           <div class="px-3 py-2">
             <div v-for="(course, idx) in courses" :key="idx" class="pb-2">
@@ -58,7 +62,7 @@ export default {
         const doExist = this.componentObj.years[gridIdx].state.filter(element => element.i === id)
         if(!doExist.length > 0) {
           this.componentObj.years[gridIdx].state.push({
-            x: block,
+            x: block - 1,
             y: 0,
             w: 1,
             h: 1,
@@ -66,6 +70,8 @@ export default {
             c: name
           })
           console.log(isPassed)
+          console.log(block)
+          console.log(this.componentObj.years[gridIdx].state)
         } else {
           this.makeToast('You already added this course')
         }

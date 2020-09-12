@@ -10,6 +10,9 @@
           <a href="#" class="nav-link" v-on:click="addYear">Add Year</a>
         </li>
         <li class="nav-item" v-if="$store.state.isAuthenticated && isHomeRoute">
+          <a href="#" class="nav-link" v-on:click="removeYear">Remove Last Year</a>
+        </li>
+        <li class="nav-item" v-if="$store.state.isAuthenticated && isHomeRoute">
           <a href="#" class="nav-link" v-on:click="saveLayout">Save</a>
         </li>
       </ul>
@@ -63,6 +66,11 @@ export default {
       } else {
         this.makeToast('You have exceeded maxiumum number of available years')
       }      
+    },
+    removeYear: function() {
+      this.components.gridComponents.splice(-1,1)
+      this.components.years.splice(-1,1)
+      this.makeToast('Last year was removed')
     },
     loadGrid: async function() {
       const years = await axios.get('http://localhost:3000/api/course/grid/' + this.$store.state.userId, {
