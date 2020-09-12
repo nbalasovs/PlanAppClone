@@ -52,6 +52,11 @@ const userSchema = Schema({
         c: String
       }]
     }]
+  },
+  startYear: {
+    type: Number,
+    min: 2000,
+    max: new Date().getFullYear()
   }
 })
 

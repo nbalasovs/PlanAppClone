@@ -18,7 +18,7 @@
               <b-collapse v-bind:id="'collapse-' + idx" class="mt-2" v-if="Object.keys(componentObj).length !== 0">
                 <b-card class="custom-menu">
                   <div v-for="(year, idx) in componentObj.years" :key="idx" class="mb-2">
-                    <b-button v-on:click="addCourse(course.data._id, 
+                    <b-button v-on:click.prevent="addCourse(course.data._id, 
                       course.data.name, course.data.block, course.spec.isPassed, idx)">
                       Add to year {{ idx + 1 }}
                     </b-button>

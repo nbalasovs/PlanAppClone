@@ -37,8 +37,17 @@
   align-items: center;
 }
 
+.vue-grid-layout {
+  border: 1px solid black;
+  height: 210px;
+}
+
 .grid-text {
   font-size: .8rem;
+}
+
+.year-title {
+  padding-right: .6rem;
 }
 
 .fab {

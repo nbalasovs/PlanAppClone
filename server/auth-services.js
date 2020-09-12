@@ -4,6 +4,7 @@ exports.generateJWT = (user) => {
   const data = {
     username: user.username,
     isAdmin: user.isAdmin,
+    startYear: user.startYear,
     id: user._id
   }
   return jwt.sign({ user: data }, process.env.SECRET)

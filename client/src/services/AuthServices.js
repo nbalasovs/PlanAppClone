@@ -51,6 +51,12 @@ export function getUserId() {
   return token.user.id
 }
 
+export function getStartYear() {
+  const token = decodeToken()
+  if(!token) return null
+  return token.user.startYear
+}
+
 export function getStatus() {
   const token = decodeToken()
   if(!token) return null
