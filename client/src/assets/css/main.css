@@ -24,3 +24,19 @@
 .custom-menu div {
   display: grid;
 }
+
+.vue-grid-item .text {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+.grid-text {
+  font-size: .8rem;
+}

@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-12">
         <component v-for="(component, idx) in componentObj.gridComponents"
                    :key="idx" :is="component" :layout="componentObj.years[idx].state" :yearGrid="idx + 1" />
         <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button>
