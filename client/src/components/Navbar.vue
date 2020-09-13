@@ -1,31 +1,54 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item" v-if="$store.state.isAuthenticated && isHomeRoute">
-          <a href="#" class="nav-link" v-on:click="addYear">Add Year</a>
-        </li>
-        <li class="nav-item" v-if="$store.state.isAuthenticated && isHomeRoute">
-          <a href="#" class="nav-link" v-on:click="removeYear">Remove Last Year</a>
-        </li>
-        <li class="nav-item" v-if="$store.state.isAuthenticated && isHomeRoute">
-          <a href="#" class="nav-link" v-on:click="saveLayout">Save</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ml-auto">
-        <li class="mr-auto nav-item" v-if="$store.state.isAuthenticated">
-          <p class="mb-0 nav-link">Welcome back, {{ $store.state.username }}!</p>
-        </li>
-        <li class="mr-auto nav-item" v-if="$store.state.isAuthenticated">
-          <a href="#" v-on:click.prevent="userLogout" class="nav-link">Logout</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <div>
+    <b-navbar toggleable="lg" type="light" variant="light">
+      <b-navbar-brand href="#" v-on:click.prevent>PlanApp Clone</b-navbar-brand>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav>
+          <b-nav-item href="#" v-if="$store.state.isAuthenticated && isHomeRoute" v-b-modal.modal-1>
+            Add Course
+          </b-nav-item>
+          <b-nav-item href="#" v-if="$store.state.isAuthenticated && isHomeRoute" v-on:click.prevent="addYear">
+            Add Year
+          </b-nav-item>
+          <b-nav-item href="#" v-if="$store.state.isAuthenticated && isHomeRoute" v-on:click.prevent="removeYear">
+            Remove Last Year
+          </b-nav-item>
+          <b-nav-item href="#" v-if="$store.state.isAuthenticated && isHomeRoute" v-on:click.prevent="saveLayout">
+            Save
+          </b-nav-item>
+        </b-navbar-nav>
+
+        <b-navbar-nav class="ml-auto">
+          <b-nav-text v-if="$store.state.isAuthenticated && windowWidth >= 992">
+            Welcome back, {{ $store.state.username }}!
+          </b-nav-text>
+          <b-nav-item href="#" v-if="$store.state.isAuthenticated" v-on:click.prevent="userLogout">
+            Logout
+          </b-nav-item>
+        </b-navbar-nav>
+
+      </b-collapse>
+
+    </b-navbar>
+    <b-modal ref="modal-1" id="modal-1" title="Add Course" :hide-footer="true">
+      <b-form @submit.prevent="onSubmit">
+        <b-form-group label="Course code:" label-for="input-1">
+          <b-form-input id="input-1" v-model="form.id" type="text" placeholder="Enter course code" required />
+        </b-form-group>
+        <b-form-group label="Course grade:" label-for="input-2">
+          <b-form-input id="input-2" v-model.number="form.grade" type="number" step="0.1" placeholder="Enter course grade" required />
+        </b-form-group>
+        <b-form-group label="Have you passed the course?">
+          <b-form-radio v-model="form.isPassed" name="courseStatus" :value="true" required>Yes</b-form-radio>
+          <b-form-radio v-model="form.isPassed" name="courseStatus" :value="false">No</b-form-radio>
+        </b-form-group>
+
+        <b-button type="submit" variant="secondary" class="float-right">Add</b-button>
+      </b-form>
+    </b-modal>
+  </div>
 </template>
 
 <script>
@@ -37,6 +60,12 @@ export default {
   name: 'Navbar',
   data() {
     return {
+      form: {
+        id: '',
+        userId: this.$store.state.userId,
+        isPassed: null,
+        grade: null
+      },
       components: {
         years: [],
         gridComponents: []
@@ -51,7 +80,6 @@ export default {
       logout()
     },
     saveLayout: async function() {
-      console.log(this.components)
       await axios.post('http://localhost:3000/api/course/grid/save', {
         userId: this.$store.state.userId,
         yearsObj: this.components.years
@@ -82,7 +110,17 @@ export default {
         }
         this.components.years = years.data
         this.$emit('childToParent', this.components)
-      } 
+      }
+    },
+    onSubmit: async function() {
+      await axios.post('http://localhost:3000/api/course/add/', this.form)
+      .then(() => {
+        this.makeToast('Course was successfully added')
+        this.$emit('courseAdded')
+        this.$refs['modal-1'].hide()
+      })
+      .catch(err => console.log(err))
+      this.$emit('courseAdded')
     },
     makeToast: function(message) {
       this.$bvToast.toast(message, {

@@ -1,3 +1,12 @@
+/* 
+* red: #D0A49A
+* blue: #6E8F96
+*/
+
+html {
+  background-color: #ededed;
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
@@ -16,9 +25,36 @@
   height: 200px;
 }
 
-.vue-grid-item:not(.vue-grid-placeholder) {
-  background: #ccc;
-  border: 1px solid black;
+.vue-grid-item:not(.vue-grid-placeholder).vue-grid-item-default {
+  background: rgba(207, 207, 207, 0.5);
+}
+
+.vue-grid-item:not(.vue-grid-placeholder).vue-grid-item-passed {
+  background: rgb(189, 189, 189);
+}
+
+.vue-grid-layout {
+  background-color: #ededed;
+}
+
+.block-1 {
+  border-left: 3px solid #6E8F96;  
+}
+
+.block-2 {
+  border-left: 3px solid #964858;
+}
+
+.block-3 {
+  border-left: 3px solid #E2B47F;
+}
+
+.block-4 {
+  border-left: 3px solid #43534C;
+}
+
+button.close:focus {
+  outline: none;
 }
 
 .custom-menu div {
@@ -38,7 +74,7 @@
 }
 
 .vue-grid-layout {
-  border: 1px solid black;
+  border-bottom: .1rem solid gainsboro;
   height: 210px;
 }
 
@@ -48,6 +84,28 @@
 
 .year-title {
   padding-right: .6rem;
+}
+
+.quartile-section {
+  border-bottom: 2px solid gainsboro;
+  border-top: 2px solid gainsboro;
+  font-size: .8rem;
+  color: #727272;
+  background: #ededed;
+}
+
+.meta-subtitle {
+  font-size: .8rem;
+  padding-left: .8rem;
+}
+
+.meta-subtitle-mobile {
+  font-size: .8rem;
+  padding-left: 0;
+}
+
+.grid-container {
+  background-color: #ededed;
 }
 
 .fab {

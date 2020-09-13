@@ -44,6 +44,8 @@ const userSchema = Schema({
   grid: {
     years: [{
       state: [{
+        isPassed: Boolean,
+        courseCode: String,
         x: Number,
         y: Number,
         w: Number,

@@ -1,7 +1,21 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 grid-container">
+        <div class="row text-center quartile-section align-middle" v-if="windowWidth >= 992">
+          <div class="col-md">
+            <p class="mb-0">Quartile 1</p>
+          </div>
+          <div class="col-md">
+            <p class="mb-0">Quartile 2</p>
+          </div>
+          <div class="col-md">
+            <p class="mb-0">Quartile 3</p>
+          </div>
+          <div class="col-md">
+            <p class="mb-0">Quartile 4</p>
+          </div>
+        </div>
         <component v-for="(component, idx) in componentObj.gridComponents"
                    :key="idx" :is="component" :layout="componentObj.years[idx].state" :yearGrid="idx + 1" />
         <div class="fab">
@@ -19,7 +33,7 @@
                 <b-card class="custom-menu">
                   <div v-for="(year, idx) in componentObj.years" :key="idx" class="mb-2">
                     <b-button v-on:click.prevent="addCourse(course.data._id, 
-                      course.data.name, course.data.block, course.spec.isPassed, idx)">
+                      course.data.name, course.data.block, course.spec.isPassed, course.data.code, idx)">
                       Add to year {{ idx + 1 }}
                     </b-button>
                   </div>
@@ -35,33 +49,20 @@
 
 <script>
 import Grid from '@/components/Grid'
-import axios from 'axios'
 
 export default {
   name: 'Home',
   components: {
     Grid
   },
-  data() {
-    return {
-      courses: null
-    }
-  },
-  created() {
-    this.fetchData()
-  },
   methods: {
-    async fetchData() {
-      const courses = await axios.get('http://localhost:3000/api/course/' + this.$store.state.userId, {
-        headers: {}
-      })
-      this.courses = courses.data
-    },
-    addCourse: function(id, name, block, isPassed, gridIdx) {
+    addCourse: function(id, name, block, isPassed, courseCode, gridIdx) {
       if(Object.keys(this.componentObj).length !== 0) {
         const doExist = this.componentObj.years[gridIdx].state.filter(element => element.i === id)
         if(!doExist.length > 0) {
           this.componentObj.years[gridIdx].state.push({
+            isPassed: isPassed,
+            courseCode: courseCode,
             x: block - 1,
             y: 0,
             w: 1,
@@ -69,9 +70,6 @@ export default {
             i: id,
             c: name
           })
-          console.log(isPassed)
-          console.log(block)
-          console.log(this.componentObj.years[gridIdx].state)
         } else {
           this.makeToast('You already added this course')
         }
@@ -87,7 +85,8 @@ export default {
     }
   },
   props: [
-    'componentObj'
+    'componentObj',
+    'courses'
   ]
 }
 </script>

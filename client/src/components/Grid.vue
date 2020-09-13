@@ -1,6 +1,6 @@
 <template>
   <div class="pb-3 pt-3">
-    <p>
+    <p :class="windowWidth >= 992 ? 'mb-0 meta-subtitle' : 'mb-0 meta-subtitle-mobile'">
       <b class="year-title">Year {{ yearGrid }}</b>
       <span>{{ startYear + (yearGrid - 1) }} - {{ startYear + yearGrid }}</span>
     </p>
@@ -9,10 +9,14 @@
       :col-num="4"
       :row-height="40"
       :autoSize="checkCoursesPerBlock() ? true : false"
-      :margin="[10, 10]"
+      :margin="windowWidth >= 992 ? [10, 10] : [0, 0]"
       :use-css-transforms="true"
       >
-      <grid-item v-for="item in layout"
+      <grid-item v-for="item in layout" 
+        :class="[
+        item.isPassed ? 'vue-grid-item-passed' : 'vue-grid-item-default',
+        checkCourseBlock(item.x + 1)
+        ]"
         :maxH="1"
         :static="true"
         :x="item.x"
@@ -22,7 +26,8 @@
         :i="item.i"
         :key="item.i">
         <div class="d-flex justify-content-between text-align-center text pr-2 pl-2">
-          <p class="mb-0 grid-text">{{ item.c }}</p>
+          <p class="mb-0 grid-text" v-if="windowWidth < 992">{{ item.courseCode }}</p>
+          <p class="mb-0 grid-text" v-else>{{ item.c }}</p>
           <b-icon icon="x-circle" v-on:click="removeItem(item.i)"></b-icon>
         </div>
       </grid-item>
@@ -38,7 +43,6 @@ export default {
   data() {
     return {
       startYear: this.$store.state.startYear,
-      theme: false
     }
   },
   components: {
@@ -62,12 +66,21 @@ export default {
           return el.x === i
         })
         if(num.length > 4) {
-          console.log(true)
           return true
         }
       }
-      console.log(false)
       return false
+    },
+    checkCourseBlock: function(block) {
+      if(block === 1) {
+        return 'block-1'
+      } else if(block === 2) {
+        return 'block-2'
+      } else if(block === 3) {
+        return 'block-3'
+      } else {
+        return 'block-4'
+      }
     }
   }
 }
