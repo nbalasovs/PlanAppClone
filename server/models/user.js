@@ -37,6 +37,8 @@ const userSchema = Schema({
       },
       grade: {
         type: Number,
+        min: 0,
+        max: 10,
         default: 0
       }
     }],

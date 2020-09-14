@@ -21,6 +21,12 @@ export function login(user) {
   .then(res => {
     if(res) {
       setToken(res.data.token)
+      return true
+    }
+  })
+  .catch(err => {
+    if(err.response.status === 401) {
+      return false
     }
   })
 }

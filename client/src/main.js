@@ -11,6 +11,20 @@ import VueWindowSize from 'vue-window-size'
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.use(VueWindowSize)
+
+Vue.mixin({
+  methods: {
+    makeToast: function(message) {
+      this.$bvToast.toast(message, {
+        title: 'Message',
+        autoHideDelay: 5000,
+        toaster: 'b-toaster-bottom-right',
+        appendToast: true
+      })
+    }
+  }
+})
+
 Vue.config.productionTip = false
 
 new Vue({

@@ -39,8 +39,12 @@ export default {
         password: this.password
       }
 
-      await login(user)
-      this.$router.push({ name: 'Home' })
+      const valid = await login(user)
+      if(valid) {
+        this.$router.push({ name: 'Home' })
+      } else {
+        this.makeToast('Username or password is wrong')
+      }
     }
   }
 }

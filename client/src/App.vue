@@ -3,7 +3,7 @@
     <Navbar 
       v-if="this.$route.name !== 'Login'" 
       v-on:childToParent="onAddYearClick"
-      v-on:courseAdded="fetchData"
+      v-on:courseAdded="addCourseDelay()"
       :isHomeRoute="isHomeRoute()" />
     <router-view :componentObj="components" :courses="courses" />
   </div>
@@ -28,21 +28,24 @@ export default {
     isHomeRoute: function() {
       return this.$route.name === 'Home'
     },
-    onAddYearClick(value) {
+    onAddYearClick: function(value) {
       this.components = value
     },
-    async fetchData() {
-      const courses = await axios.get('http://localhost:3000/api/course/' + this.$store.state.userId, {
-        headers: {}
-      })
+    fetchData: async function() {
+      const courses = await axios.get(this.$store.state.apiURL + '/api/course/' + this.$store.state.userId)
       this.courses = courses.data
     },
+    addCourseDelay: function() {
+      setTimeout(() => this.fetchData(), 1000)
+    }
   },
   beforeCreate: function() {
     this.$store.dispatch('authenticate')
   },
   created() {
-    this.fetchData()
+    if(this.$store.state.userId !== null) {
+      this.fetchData()
+    }
   }
 }
 </script>

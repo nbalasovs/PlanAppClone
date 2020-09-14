@@ -38,7 +38,8 @@
           <b-form-input id="input-1" v-model="form.id" type="text" placeholder="Enter course code" required />
         </b-form-group>
         <b-form-group label="Course grade:" label-for="input-2">
-          <b-form-input id="input-2" v-model.number="form.grade" type="number" step="0.1" placeholder="Enter course grade" required />
+          <b-form-input id="input-2" v-model.number="form.grade" type="number" 
+            step="0.1" placeholder="Enter course grade" min="0" max="10" required />
         </b-form-group>
         <b-form-group label="Have you passed the course?">
           <b-form-radio v-model="form.isPassed" name="courseStatus" :value="true" required>Yes</b-form-radio>
@@ -73,14 +74,17 @@ export default {
     }
   },
   created() {
-    this.loadGrid()
+    if(this.$store.state.userId !== null) {
+      this.loadGrid()
+    }
   },
   methods: {
     userLogout: function() {
       logout()
+      this.$router.push({ name: 'Login' })
     },
     saveLayout: async function() {
-      await axios.post('http://localhost:3000/api/course/grid/save', {
+      await axios.post(this.$store.state.apiURL + '/api/course/grid/save', {
         userId: this.$store.state.userId,
         yearsObj: this.components.years
       })
@@ -101,7 +105,7 @@ export default {
       this.makeToast('Last year was removed')
     },
     loadGrid: async function() {
-      const years = await axios.get('http://localhost:3000/api/course/grid/' + this.$store.state.userId, {
+      const years = await axios.get(this.$store.state.apiURL + '/api/course/grid/' + this.$store.state.userId, {
         headers: {}
       })
       if(years.data.length > 0) {
@@ -113,22 +117,36 @@ export default {
       }
     },
     onSubmit: async function() {
-      await axios.post('http://localhost:3000/api/course/add/', this.form)
-      .then(() => {
-        this.makeToast('Course was successfully added')
-        this.$emit('courseAdded')
-        this.$refs['modal-1'].hide()
-      })
-      .catch(err => console.log(err))
-      this.$emit('courseAdded')
-    },
-    makeToast: function(message) {
-      this.$bvToast.toast(message, {
-        title: 'Message',
-        autoHideDelay: 5000,
-        toaster: 'b-toaster-bottom-right',
-        appendToast: true
-      })
+      const years = this.components.years
+      var doExist = false
+
+      for(let year of years) {
+        if(doExist) break
+        for(let course of year.state) {
+          if(course.courseCode === String(this.form.id).toUpperCase()) {
+            this.makeToast('This course is already in your planning')
+            this.$refs['modal-1'].hide()
+            doExist = true
+            break
+          }
+        }
+      }
+      
+      if(!doExist) {
+        await axios.post(this.$store.state.apiURL + '/api/course/add/', this.form)
+        .then(() => {
+          this.makeToast('Course was successfully added')
+          this.$emit('courseAdded')
+          this.$refs['modal-1'].hide()
+        })
+        .catch(err => {
+          if(err.response.status === 404) {
+            const res = JSON.parse(err.response.request.response)
+            this.makeToast(res.message)
+            this.$refs['modal-1'].hide()
+          }
+        })
+      }
     }
   },
   props: [

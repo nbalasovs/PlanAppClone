@@ -75,14 +75,6 @@ export default {
         }
       }
     },
-    makeToast: function(message) {
-      this.$bvToast.toast(message, {
-        title: 'Message',
-        autoHideDelay: 5000,
-        toaster: 'b-toaster-bottom-right',
-        appendToast: true
-      })
-    }
   },
   props: [
     'componentObj',
