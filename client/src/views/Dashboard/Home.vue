@@ -25,15 +25,15 @@
         </div>
         <b-sidebar id="sidebar-right" title="Courses" right shadow>
           <div class="px-3 py-2">
-            <div v-for="(course, idx) in courses" :key="idx" class="pb-2">
-              <b-button v-b-toggle="'collapse-' + idx" class="btn-block">
+            <div v-for="(course, index) in courses" :key="index" class="pb-2">
+              <b-button v-b-toggle="'collapse-' + index" class="btn-block">
               {{ course.data.name }}
               </b-button>
-              <b-collapse v-bind:id="'collapse-' + idx" class="mt-2" v-if="Object.keys(componentObj).length !== 0">
+              <b-collapse v-bind:id="'collapse-' + index" class="mt-2" v-if="Object.keys(componentObj).length !== 0">
                 <b-card class="custom-menu">
                   <div v-for="(year, idx) in componentObj.years" :key="idx" class="mb-2">
                     <b-button v-on:click.prevent="addCourse(course.data._id, 
-                      course.data.name, course.data.block, course.spec.isPassed, course.data.code, idx)">
+                      course.data.name, course.data.block, course.spec.isPassed, course.data.code, idx, index)">
                       Add to year {{ idx + 1 }}
                     </b-button>
                   </div>
@@ -68,7 +68,7 @@ export default {
     Grid
   },
   methods: {
-    addCourse: function(id, name, block, isPassed, courseCode, gridIdx) {
+    addCourse: function(id, name, block, isPassed, courseCode, gridIdx, collapseId) {
       if(Object.keys(this.componentObj).length !== 0) {
         const doExist = this.componentObj.years[gridIdx].state.filter(element => element.i === id)
         if(!doExist.length > 0) {
@@ -82,6 +82,7 @@ export default {
             i: id,
             c: name
           })
+          this.$root.$emit('bv::toggle::collapse', `collapse-${collapseId}`)
         } else {
           this.makeToast('You already added this course')
         }
