@@ -3,7 +3,7 @@
 * blue: #6E8F96
 */
 
-html {
+#app, html {
   background-color: #ededed;
 }
 
@@ -20,9 +20,8 @@ html {
 }
 
 .logo {
-  object-fit: cover;
-  width: 300px;
-  height: 200px;
+  width: 200px;
+  padding-bottom: 40px;
 }
 
 .vue-grid-item:not(.vue-grid-placeholder).vue-grid-item-default {

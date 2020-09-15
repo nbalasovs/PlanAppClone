@@ -1,11 +1,15 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="light" variant="light">
-      <b-navbar-brand href="#" v-on:click.prevent>PlanApp Clone</b-navbar-brand>
+      <b-navbar-brand href="#" v-on:click.prevent="$router.push({ name: 'Home' })">PlanApp Clone</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
+          <b-nav-item href="#" v-if="$store.state.isAuthenticated && $store.state.isAdmin" 
+            v-on:click.prevent="$router.push({ name: 'Register' })">
+            Register New User
+          </b-nav-item>
           <b-nav-item href="#" v-if="$store.state.isAuthenticated && isHomeRoute" v-b-modal.modal-1>
             Add Course
           </b-nav-item>

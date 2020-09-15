@@ -18,7 +18,7 @@ Vue.use(VueRouter)
     }
   },
   {
-    path: '/secureregisterpath',
+    path: '/register',
     name: 'Register',
     component: () => import('../views/Authentication/Registration.vue'),
     beforeEnter: (to, from, next) => {
