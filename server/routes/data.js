@@ -6,7 +6,7 @@ const Course = require('../models/course')
 
 router.get('/:id', (req, res) => {
   User.findById(req.params.id, (err, data) => {
-    if(err) console.log(err)
+    if(err) return res.status(500).json({ error: err })
     const spec = data.list.items
     const ids = data.list.items.map((el) => {
       return el.courseId
@@ -41,7 +41,7 @@ router.post('/grid/save', (req, res) => {
 
 router.get('/grid/:id', (req, res) => {
   User.findById(req.params.id, (err, data) => {
-    if(err) console.log(err)
+    if(err) return res.status(500).json({ error: err })
     return res.status(200).json(data.grid.years)
   })
 })

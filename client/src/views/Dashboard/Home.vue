@@ -37,6 +37,7 @@
                       Add to year {{ idx + 1 }}
                     </b-button>
                   </div>
+                  <b-button variant="danger" v-on:click="displayModal(course.data._id)">Remove course</b-button>
                 </b-card>
               </b-collapse>
             </div>
@@ -44,11 +45,22 @@
         </b-sidebar>
       </div>
     </div>
+    <b-modal 
+      v-for="(course, idx) in courses" 
+      :key="idx" 
+      :id="course.data._id"
+      v-on:ok="removeCourse(course.data._id)"
+      ok-title="Remove"
+      ok-variant="danger"
+      title="Remove course">
+      <p class="my-4">Are you sure you want to remove {{ course.data.name }} from planning?</p>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import Grid from '@/components/Grid'
+import axios from 'axios'
 
 export default {
   name: 'Home',
@@ -75,6 +87,18 @@ export default {
         }
       }
     },
+    displayModal: function(id) {
+      this.$bvModal.show(id)
+    },
+    removeCourse: function(id) {
+      axios.post(this.$store.state.apiURL + '/api/course/remove', {
+        userId: this.$store.state.userId,
+        courseId: id
+      }).then(() => {
+        this.makeToast('Course was removed')
+        this.$emit('courseRemoved', id)
+      }).catch(e => console.log(e))
+    }
   },
   props: [
     'componentObj',

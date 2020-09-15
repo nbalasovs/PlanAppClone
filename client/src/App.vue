@@ -3,9 +3,9 @@
     <Navbar 
       v-if="this.$route.name !== 'Login'" 
       v-on:childToParent="onAddYearClick"
-      v-on:courseAdded="addCourseDelay()"
+      v-on:courseAdded="fetchDataDelay()"
       :isHomeRoute="isHomeRoute()" />
-    <router-view :componentObj="components" :courses="courses" />
+    <router-view :componentObj="components" :courses="courses" v-on:courseRemoved="onCourseRemove" />
   </div>
 </template>
 
@@ -35,8 +35,24 @@ export default {
       const courses = await axios.get(this.$store.state.apiURL + '/api/course/' + this.$store.state.userId)
       this.courses = courses.data
     },
-    addCourseDelay: function() {
+    fetchDataDelay: function() {
       setTimeout(() => this.fetchData(), 1000)
+    },
+    onCourseRemove: function(value) {
+      var idx = -1
+      const years = this.components.years
+      this.fetchDataDelay()
+
+      for (const [i, year] of years.entries()) {
+        idx = year.state.findIndex(el => String(el.i) === String(value))
+        if(idx !== -1) idx = i; break
+      }
+
+      if(idx !== -1) {
+        const state = this.components.years[idx].state
+        const stateSubset = state.filter(el => String(el.i) !== String(value))
+        years[idx].state = stateSubset
+      }
     }
   },
   beforeCreate: function() {
