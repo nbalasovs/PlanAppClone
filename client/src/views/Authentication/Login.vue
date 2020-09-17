@@ -8,11 +8,11 @@
         <form class="custom-form" v-on:submit.prevent="authenticate">
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" v-model="username" required>
+            <input type="text" class="form-control" id="username" v-model="username" placeholder="Username" required>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" v-model="password" required>
+            <input type="password" class="form-control" id="password" v-model="password" placeholder="Password" required>
           </div>
           <button type="submit" class="btn btn-secondary btn-block">Submit</button>
         </form>

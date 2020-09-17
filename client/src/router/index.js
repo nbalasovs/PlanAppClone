@@ -10,11 +10,8 @@ Vue.use(VueRouter)
     name: 'Login',
     component: () => import('../views/Authentication/Login.vue'),
     beforeEnter: (to, from, next) => {
-      if(!isAuthenticated()) {
-        next()
-      } else {
-        next({ name: 'Home' })
-      }
+      if(!isAuthenticated()) next()
+      else next({ name: 'Home' })
     }
   },
   {
@@ -22,23 +19,26 @@ Vue.use(VueRouter)
     name: 'Register',
     component: () => import('../views/Authentication/Registration.vue'),
     beforeEnter: (to, from, next) => {
-      if(isAuthenticated() && getStatus()) {
-        next()
-      } else {
-        next({ name: 'Login' })
-      }
+      if(isAuthenticated() && getStatus()) next()
+      else next({ name: 'Login' })
+    }
+  },
+  {
+    path: '/',
+    name: 'Home',
+    component: () => import('../views/Home.vue'),
+    beforeEnter: (to, from, next) => {
+      if(isAuthenticated()) next()
+      else next({ name: 'Login' })
     }
   },
   {
     path: '/dashboard',
-    name: 'Home',
-    component: () => import('../views/Dashboard/Home.vue'),
+    name: 'Dashboard',
+    component: () => import('../views/Dashboard/Dashboard.vue'),
     beforeEnter: (to, from, next) => {
-      if(isAuthenticated()) {
-        next()
-      } else {
-        next({ name: 'Login' })
-      }
+      if(isAuthenticated) next()
+      else next({ name: 'Login' })
     }
   }
 ]

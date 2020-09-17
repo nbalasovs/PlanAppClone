@@ -5,12 +5,16 @@ import store from './store'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/css/main.css'
+import 'zingchart/es6'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import zingchartVue from 'zingchart-vue'
 import VueWindowSize from 'vue-window-size'
 
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.use(VueWindowSize)
+
+Vue.component('zingchart', zingchartVue)
 
 Vue.mixin({
   methods: {

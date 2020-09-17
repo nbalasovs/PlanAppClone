@@ -10,6 +10,10 @@
             v-on:click.prevent="$router.push({ name: 'Register' })">
             Register New User
           </b-nav-item>
+          <b-nav-item href="#" v-if="$store.state.isAuthenticated" 
+            v-on:click.prevent="$router.push({ name: 'Dashboard' })">
+            Dashboard
+          </b-nav-item>
           <b-nav-item href="#" v-if="$store.state.isAuthenticated && isHomeRoute" v-b-modal.modal-1>
             Add Course
           </b-nav-item>
@@ -83,6 +87,11 @@ export default {
     }
   },
   methods: {
+    purgeFormData: function() {
+      this.form.id = '',
+      this.form.isPassed = null,
+      this.form.grade = null
+    },
     userLogout: function() {
       logout()
       this.$router.push({ name: 'Login' })
@@ -151,6 +160,7 @@ export default {
           }
         })
       }
+      this.purgeFormData()
     }
   },
   props: [

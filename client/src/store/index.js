@@ -11,7 +11,8 @@ export default new Vuex.Store({
     username: null,
     userId: null,
     isAdmin: null,
-    startYear: null
+    startYear: null,
+    courses: null
   },
   mutations: {
     authenticate(state) {
@@ -28,6 +29,9 @@ export default new Vuex.Store({
         state.isAdmin = null
         state.startYear = null
       }
+    },
+    userData(state, payload) {
+      state.courses = payload
     }
   },
   actions: {

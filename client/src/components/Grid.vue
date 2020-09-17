@@ -18,7 +18,8 @@
         checkCourseBlock(item.x + 1)
         ]"
         :maxH="1"
-        :static="true"
+        :isDraggable="true"
+        :isResizable="false"
         :x="item.x"
         :y="item.y"
         :w="item.w"
