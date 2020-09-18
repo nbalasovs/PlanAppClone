@@ -3,20 +3,26 @@
     <div class="row">
       <div class="col-md-8">
         <vue-frappe
-            id="hui"
-            :labels="[
-                '12am-3am', '3am-6am', '6am-9am', '9am-12pm',
-                '12pm-3pm', '3pm-6pm', '6pm-9pm', '9pm-12am'
-            ]"
-            title="My Awesome Chart"
-            type="axis-mixed"
-            :height="300"
-            :colors="['purple', '#ffa3ef', 'light-blue']"
-            :dataSets="this.data">
+            id="barChart"
+            title="Grades Overview"
+            class="img-fluid"
+            type="bar"
+            :max="10"
+            :labels="dashboardData.boxPlotData.names"
+            :colors="['violet', 'red']"
+            :dataSets="this.barChartData">
         </vue-frappe>
       </div>
       <div class="col-md-4">
-        <p>2</p>
+        <vue-frappe
+            id="donutChart"
+            title="Credits Overview"
+            class="img-fluid"
+            :labels="['Passed', 'Not Passed']"
+            type="donut"
+            :colors="['violet', 'red']"
+            :dataSets="this.donutData">
+        </vue-frappe>
       </div>
     </div>
   </div>
@@ -28,25 +34,16 @@ export default {
   name: 'Dashboard',
   data() {
     return {
-      data: [{
-        name: "Some Data", chartType: 'bar',
-        values: [25, 40, 30, 35, 8, 52, 17, -4]
-      },
-      {
-        name: "Another Set", chartType: 'bar',
-        values: [25, 50, -10, 15, 18, 32, 27, 14]
-      },
-      {
-        name: "Yet Another", chartType: 'line',
-        values: [15, 20, -3, -15, 58, 12, -17, 37]
+      donutData: [{
+        values: this.dashboardData.creditsOverview
+      }],
+      barChartData: [{
+        values: this.dashboardData.boxPlotData.grades
       }]
     }
   },
-  beforeUpdate() {
-
-  },
-  created() {
-
-  }
+  props: [
+    'dashboardData'
+  ]
 }
 </script>

@@ -29,9 +29,6 @@ export default new Vuex.Store({
         state.isAdmin = null
         state.startYear = null
       }
-    },
-    userData(state, payload) {
-      state.courses = payload
     }
   },
   actions: {

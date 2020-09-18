@@ -5,7 +5,10 @@
       v-on:childToParent="onAddYearClick"
       v-on:courseAdded="fetchDataDelay()"
       :isHomeRoute="isHomeRoute()" />
-    <router-view :componentObj="components" :courses="courses" v-on:courseRemoved="onCourseRemove" />
+    <router-view :componentObj="components" 
+      :courses="courses" 
+      :dashboardData="dashboardData" 
+      v-on:courseRemoved="onCourseRemove" />
   </div>
 </template>
 
@@ -21,7 +24,8 @@ export default {
   data() {
     return {
       components: {},
-      courses: null
+      courses: null,
+      dashboardData: null
     }
   },
   methods: {
@@ -39,9 +43,24 @@ export default {
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
       })
       this.courses = courses.data
-      // this.$store.commit('userData', {
-      //   grades: [1,2,3]
-      // })
+      const credits = this.courses.filter(el => {
+        return el.spec.isPassed
+      }).map(el => el.data.credits).reduce((a, b) => a + b)
+      const names = this.courses.sort((a, b) => a.spec.grade - b.spec.grade).map(el => {
+        return el.data.name
+      })
+      const grades = this.courses.sort((a, b) => a.spec.grade - b.spec.grade).map(el => {
+        return el.spec.grade
+      }).filter(el => el !== 0)
+
+      this.dashboardData = {
+        creditsOverview: (credits >= 180) ? [180] : [credits, 180 - credits],
+        boxPlotData: {
+          names: names,
+          grades: grades
+        }
+      }
+      console.log(this.dashboardData)
     },
     fetchDataDelay: function() {
       setTimeout(() => this.fetchData(), 1000)

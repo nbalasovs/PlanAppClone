@@ -137,6 +137,15 @@ button.close:focus {
   background: url("../icons/add.svg") center/65% no-repeat;
 }
 
+.frappe-chart .x.axis .line-vertical,
+.frappe-chart .x.axis text {
+    display: none;
+}
+
+#donutChart .chart-legend {
+  display: none;
+}
+
 @media (max-width: 992px) {
   .fab {
     left: 90% !important;
