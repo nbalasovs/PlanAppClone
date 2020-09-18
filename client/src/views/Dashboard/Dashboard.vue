@@ -25,6 +25,13 @@
         </vue-frappe>
       </div>
     </div>
+    <div class="col-md-12">
+      <b-table striped hover :items="items">
+        <template v-slot:cell(status)="data">
+          <b-badge :variant="data.value ? 'success' : 'warning'">{{ data.value ? 'Passed' : 'Failed' }}</b-badge>
+        </template>
+      </b-table>
+    </div>
   </div>
 </template>
 
@@ -34,6 +41,7 @@ export default {
   name: 'Dashboard',
   data() {
     return {
+      items: null,
       donutData: [{
         values: this.dashboardData.creditsOverview
       }],
@@ -42,8 +50,41 @@ export default {
       }]
     }
   },
+  methods: {
+    prepareTableData: function() {
+      const items = this.courses.map(el => {
+        return {
+          name: el.data.name,
+          code: el.data.code,
+          credits: el.data.credits,
+          category: el.data.category,
+          type: el.data.type,
+          offered: el.data.offered.match('^.+?;(.+?);')[1],
+          lecturer: el.data.lecturer,
+          block: el.data.block,
+          grade: el.spec.grade,
+          status: el.spec.isPassed
+        }
+      })
+      this.items = items
+    },
+    preventReload() {
+      event.preventDefault()
+      event.returnValue = ""
+    }
+  },
+  created() {
+    this.prepareTableData()
+  },
+  beforeMount() {
+    window.addEventListener("beforeunload", this.preventReload)
+  },
+  beforeDestroy() {
+    window.removeEventListener("beforeunload", this.preventReload);
+  },
   props: [
-    'dashboardData'
+    'dashboardData',
+    'courses'
   ]
 }
 </script>

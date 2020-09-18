@@ -46,12 +46,10 @@ export default {
       const credits = this.courses.filter(el => {
         return el.spec.isPassed
       }).map(el => el.data.credits).reduce((a, b) => a + b)
-      const names = this.courses.sort((a, b) => a.spec.grade - b.spec.grade).map(el => {
-        return el.data.name
-      })
-      const grades = this.courses.sort((a, b) => a.spec.grade - b.spec.grade).map(el => {
-        return el.spec.grade
-      }).filter(el => el !== 0)
+      const names = this.courses.sort((a, b) => a.spec.grade - b.spec.grade).filter(el => el.spec.grade !== 0)
+      .map(el => el.data.name)
+      const grades = this.courses.sort((a, b) => a.spec.grade - b.spec.grade).filter(el => el.spec.grade !== 0)
+      .map(el => el.spec.grade)
 
       this.dashboardData = {
         creditsOverview: (credits >= 180) ? [180] : [credits, 180 - credits],
@@ -60,7 +58,6 @@ export default {
           grades: grades
         }
       }
-      console.log(this.dashboardData)
     },
     fetchDataDelay: function() {
       setTimeout(() => this.fetchData(), 1000)
