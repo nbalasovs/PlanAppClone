@@ -11,6 +11,10 @@
           <input v-model="last" type="text" class="form-control" id="last" placeholder="Last Name" required/>
       </div>
       <div class="form-group">
+          <label for="username">Start Year</label>
+          <input v-model="startYear" type="number" class="form-control" id="last" placeholder="Start Year" required/>
+      </div>
+      <div class="form-group">
           <label for="username">Username</label>
           <input v-model="username" type="text" class="form-control" id="username" placeholder="Username" required/>
       </div>
@@ -35,7 +39,8 @@ export default {
       first: '',
       last: '',
       username: '',
-      password: ''
+      password: '',
+      startYear: '',
     }
   },
   methods: {
@@ -44,7 +49,8 @@ export default {
         first: this.first,
         last: this.last,
         username: this.username,
-        password: this.password
+        password: this.password,
+        startYear: this.startYear
       }
 
       await registerUser(user)

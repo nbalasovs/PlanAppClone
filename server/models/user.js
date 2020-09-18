@@ -60,7 +60,8 @@ const userSchema = Schema({
   startYear: {
     type: Number,
     min: 2000,
-    max: new Date().getFullYear()
+    max: new Date().getFullYear(),
+    default: new Date().getFullYear()
   }
 })
 

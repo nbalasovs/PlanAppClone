@@ -7,6 +7,7 @@
             title="Grades Overview"
             class="img-fluid"
             type="bar"
+            v-if="barChartData[0].values"
             :max="10"
             :labels="dashboardData.boxPlotData.names"
             :colors="['violet', 'red']"
@@ -18,6 +19,7 @@
             id="donutChart"
             title="Credits Overview"
             class="img-fluid"
+            v-if="barChartData[0].values"
             :labels="['Passed', 'Not Passed']"
             type="donut"
             :colors="['violet', 'red']"
@@ -43,10 +45,10 @@ export default {
     return {
       items: null,
       donutData: [{
-        values: this.dashboardData.creditsOverview
+        values: null
       }],
       barChartData: [{
-        values: this.dashboardData.boxPlotData.grades
+        values: null
       }]
     }
   },
@@ -67,20 +69,16 @@ export default {
         }
       })
       this.items = items
-    },
-    preventReload() {
-      event.preventDefault()
-      event.returnValue = ""
     }
   },
   created() {
-    this.prepareTableData()
-  },
-  beforeMount() {
-    window.addEventListener("beforeunload", this.preventReload)
-  },
-  beforeDestroy() {
-    window.removeEventListener("beforeunload", this.preventReload);
+    if(!this.dashboardData) {
+      this.$router.push({ name: 'Home' })
+    } else {
+      this.donutData[0].values = this.dashboardData.creditsOverview
+      this.barChartData[0].values = this.dashboardData.boxPlotData.grades
+      this.prepareTableData()
+    }
   },
   props: [
     'dashboardData',
