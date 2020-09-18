@@ -25,7 +25,10 @@
         </div>
         <b-sidebar id="sidebar-right" title="Courses" right shadow>
           <div class="px-3 py-2">
-            <div v-for="(course, index) in courses" :key="index" class="pb-2">
+            <b-form class="pt-2 pb-2">
+              <b-form-input type="text" size="md" class="mr-sm-2" v-on:keydown.enter.prevent placeholder="Search" v-model="query"></b-form-input>
+            </b-form>
+            <div v-for="(course, index) in filteredList" :key="index" class="pb-2">
               <b-button v-b-toggle="'collapse-' + index" class="btn-block">
               {{ course.data.name }}
               </b-button>
@@ -67,6 +70,11 @@ export default {
   components: {
     Grid
   },
+  data() {
+    return {
+      query: ''
+    }
+  },
   methods: {
     addCourse: function(id, name, block, isPassed, courseCode, gridIdx, collapseId) {
       if(Object.keys(this.componentObj).length !== 0) {
@@ -99,6 +107,17 @@ export default {
         this.makeToast('Course was removed')
         this.$emit('courseRemoved', id)
       }).catch(e => console.log(e))
+    }
+  },
+  computed: {
+    filteredList: function() {
+      if(this.query) {
+        return this.courses.filter(el => {
+          return el.data.name.toLowerCase().includes(this.query.toLowerCase())
+        })
+      } else {
+        return this.courses
+      }
     }
   },
   props: [

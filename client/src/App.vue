@@ -33,41 +33,18 @@ export default {
     },
     fetchData: async function() {
       const courses = await axios.get(this.$store.state.apiURL + '/api/course/' + this.$store.state.userId)
-      this.courses = courses.data
-      this.$store.commit('userData', {
-        grades: this.getGrades(),
-        names: this.getCourseNames(),
-        credits: this.getOveralPoints()
+      courses.data.sort((a, b) => {
+        const textA = a.data.name.toUpperCase()
+        const textB = b.data.name.toUpperCase()
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
       })
+      this.courses = courses.data
+      // this.$store.commit('userData', {
+      //   grades: [1,2,3]
+      // })
     },
     fetchDataDelay: function() {
       setTimeout(() => this.fetchData(), 1000)
-    },
-    getGrades: function() {
-      const grades = this.courses.map(el => {
-        return el.spec.grade
-      }).sort((a, b) => {
-        return a - b
-      }).filter(el => el !== 0)
-      return grades
-    },
-    getCourseNames: function() {
-      const names = this.courses.map(el => {
-        return el.data.name
-      })
-      return names
-    },
-    getOveralPoints: function() {
-      const max = 180
-      const credits = this.courses.map(el => {
-        return el.data.credits
-      }).reduce((a,b) => a + b, 0)
-      var leftovers = max - credits
-      if(leftovers === 0) return [ { values: [credits] } ]
-      return [
-        { values: [credits] },
-        { values: [max - credits] }
-      ]
     },
     onCourseRemove: function(value) {
       var idx = -1

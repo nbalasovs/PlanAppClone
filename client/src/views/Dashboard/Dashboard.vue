@@ -2,10 +2,21 @@
   <div class="container-fluid pt-4">
     <div class="row">
       <div class="col-md-8">
-        <zingchart v-if="barChartConfig.series[0].values" :data="barChartConfig"></zingchart>
+        <vue-frappe
+            id="hui"
+            :labels="[
+                '12am-3am', '3am-6am', '6am-9am', '9am-12pm',
+                '12pm-3pm', '3pm-6pm', '6pm-9pm', '9pm-12am'
+            ]"
+            title="My Awesome Chart"
+            type="axis-mixed"
+            :height="300"
+            :colors="['purple', '#ffa3ef', 'light-blue']"
+            :dataSets="this.data">
+        </vue-frappe>
       </div>
       <div class="col-md-4">
-        <zingchart v-if="donutChartConfig.series[0].values" :data="donutChartConfig"></zingchart>
+        <p>2</p>
       </div>
     </div>
   </div>
@@ -17,64 +28,25 @@ export default {
   name: 'Dashboard',
   data() {
     return {
-      barChartConfig: {
-        type: "bar",
-        series: [{
-          values: null
-        }],
-        title: {
-          text: "Grade Overview",
-          'font': 'inherit',
-          'font-weight': 'none'
-        },
-        backgroundColor: 'transparent',
-        'scale-y': {
-          values: '0:10:1',
-          guide: {
-            'line-style': 'none'
-          }
-        },
-        plot: {
-          'background-color': '#6F975C',
-          tooltip: {
-            text: "%data-labels (%v)"
-          },
-          dataLabels: null
-        }
+      data: [{
+        name: "Some Data", chartType: 'bar',
+        values: [25, 40, 30, 35, 8, 52, 17, -4]
       },
-      donutChartConfig: {
-        type: 'ring',
-        series: [{
-          values: null
-        }],
-        title: {
-          text: 'Overall Points',
-          'font': 'inherit',
-          'font-weight': 'none'
-        },
-        backgroundColor: 'transparent',
-        plot: {
-          'background-color': '#6F975C',
-          'slice': '65%'
-        },
-        scale: {
-          'size-factor':0.5
-        },
-      }
+      {
+        name: "Another Set", chartType: 'bar',
+        values: [25, 50, -10, 15, 18, 32, 27, 14]
+      },
+      {
+        name: "Yet Another", chartType: 'line',
+        values: [15, 20, -3, -15, 58, 12, -17, 37]
+      }]
     }
   },
   beforeUpdate() {
-    console.log(this.$store.state.courses.credits)
-    this.barChartConfig.series[0].values = this.$store.state.courses.grades
-    this.donutChartConfig.series = this.$store.state.courses.credits
-    this.barChartConfig.plot.dataLabels = this.$store.state.courses.names
+
   },
   created() {
-    if(this.$store.state.courses) {
-      this.barChartConfig.series[0].values = this.$store.state.courses.grades
-      this.donutChartConfig.series = this.$store.state.courses.credits
-      this.barChartConfig.plot.dataLabels = this.$store.state.courses.names
-    }
+
   }
 }
 </script>
