@@ -9,6 +9,7 @@
             type="bar"
             v-if="barChartData[0].values"
             :max="10"
+            :tooltipOptions="tooltipOptions"
             :labels="dashboardData.boxPlotData.names"
             :colors="['violet', 'red']"
             :dataSets="this.barChartData">
@@ -17,11 +18,11 @@
       <div class="col-md-4">
         <vue-frappe
             id="donutChart"
-            title="Credits Overview"
+            type="donut"
             class="img-fluid"
             v-if="barChartData[0].values"
+            :title="`Credits Overview: ${donutData[0].values[0]}/180`"
             :labels="['Passed', 'Not Passed']"
-            type="donut"
             :colors="['violet', 'red']"
             :dataSets="this.donutData">
         </vue-frappe>
@@ -44,6 +45,10 @@ export default {
   data() {
     return {
       items: null,
+      tooltipOptions: {
+        formatTooltipX: (d) => (d + "").toUpperCase(),
+        formatTooltipY: (d) => "Grade: " + d,
+      },
       donutData: [{
         values: null
       }],
@@ -71,8 +76,11 @@ export default {
       this.items = items
     }
   },
-  created() {
+  created: function() {
     if(!this.dashboardData) {
+      this.$router.push({ name: 'Home' })
+    } else if(this.courses.length <= 0) {
+      this.$emit('accessDenied')
       this.$router.push({ name: 'Home' })
     } else {
       this.donutData[0].values = this.dashboardData.creditsOverview

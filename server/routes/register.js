@@ -20,7 +20,8 @@ router.post('/register', (req, res) => {
     first: req.body.first,
     last: req.body.last,
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
+    startYear: req.body.startYear
   })
 
   user.save((err) => {

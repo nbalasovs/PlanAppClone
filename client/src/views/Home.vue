@@ -18,12 +18,15 @@
         </div>
         <component v-for="(component, idx) in componentObj.gridComponents"
                    :key="idx" :is="component" :layout="componentObj.years[idx].state" :yearGrid="idx + 1" />
-        <div class="fab">
+        <div class="fab" v-if="(courses) ? (courses.length > 0 ? true : false) : false">
           <span class="fab-action-button" v-b-toggle.sidebar-right>
             <i class="fab-action-button__icon"></i>
           </span>
         </div>
         <b-sidebar id="sidebar-right" title="Courses" right shadow>
+          <div class="overlay" v-if="loading">
+            <b-spinner class="spinner-overlay" label="Spinning" variant="dark"></b-spinner>
+          </div>
           <div class="px-3 py-2">
             <b-form class="pt-2 pb-2">
               <b-form-input type="text" size="md" class="mr-sm-2" v-on:keydown.enter.prevent placeholder="Search" v-model="query"></b-form-input>
@@ -32,7 +35,7 @@
               <b-button v-b-toggle="'collapse-' + index" class="btn-block">
               {{ course.data.name }}
               </b-button>
-              <b-collapse v-bind:id="'collapse-' + index" class="mt-2" v-if="Object.keys(componentObj).length !== 0">
+              <b-collapse v-bind:id="'collapse-' + index" class="mt-2">
                 <b-card class="custom-menu">
                   <div v-for="(year, idx) in componentObj.years" :key="idx" class="mb-2">
                     <b-button v-on:click.prevent="addCourse(course.data._id, 
@@ -72,7 +75,8 @@ export default {
   },
   data() {
     return {
-      query: ''
+      query: '',
+      loading: false
     }
   },
   methods: {
@@ -99,13 +103,16 @@ export default {
     displayModal: function(id) {
       this.$bvModal.show(id)
     },
-    removeCourse: function(id) {
-      axios.post(this.$store.state.apiURL + '/api/course/remove', {
+    removeCourse: async function(id) {
+      this.loading = true
+      await axios.post(this.$store.state.apiURL + '/api/course/remove', {
         userId: this.$store.state.userId,
         courseId: id
-      }).then(() => {
+      }).then(async () => {
+        if(this.courses.length === 0) this.$emit('updateData')
         this.makeToast('Course was removed')
         this.$emit('courseRemoved', id)
+        setTimeout(() => this.loading = false, 2000)
       }).catch(e => console.log(e))
     }
   },

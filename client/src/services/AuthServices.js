@@ -70,7 +70,10 @@ export function getStatus() {
 }
 
 export function registerUser(user) {
-  return request().post('/api/register', user)
+  return request().post('/api/register', user).then(res => {
+    if(res.response.status === 201) return true
+    else return false
+  }).catch(e => e)
 }
 
 function decodeToken() {

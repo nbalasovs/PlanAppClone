@@ -20,7 +20,7 @@ Vue.mixin({
     makeToast: function(message) {
       this.$bvToast.toast(message, {
         title: 'Message',
-        autoHideDelay: 5000,
+        autoHideDelay: 3000,
         toaster: 'b-toaster-bottom-right',
         appendToast: true
       })

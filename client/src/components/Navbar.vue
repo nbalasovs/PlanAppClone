@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="light" variant="light">
-      <b-navbar-brand href="#" v-on:click.prevent="$router.push({ name: 'Home' }).catch(()=>{})">
+      <b-navbar-brand href="#" v-on:click.prevent="$router.push({ name: 'Home' }).catch(() => {})">
         PlanApp Clone
       </b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -9,11 +9,11 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item href="#" v-if="$store.state.isAuthenticated && $store.state.isAdmin" 
-            v-on:click.prevent="$router.push({ name: 'Register' }).catch(()=>{})">
+            v-on:click.prevent="$router.push({ name: 'Register' }).catch(() => {})">
             Register New User
           </b-nav-item>
           <b-nav-item href="#" v-if="$store.state.isAuthenticated" 
-            v-on:click.prevent="$router.push({ name: 'Dashboard' }).catch(()=>{})">
+            v-on:click.prevent="$router.push({ name: 'Dashboard' }).catch(() => {})">
             Dashboard
           </b-nav-item>
           <b-nav-item href="#" v-if="$store.state.isAuthenticated && isHomeRoute" v-b-modal.modal-1>
@@ -83,7 +83,7 @@ export default {
       }
     }
   },
-  created() {
+  created: function() {
     if(this.$store.state.userId !== null) {
       this.loadGrid()
     }
@@ -96,6 +96,7 @@ export default {
     },
     userLogout: function() {
       logout()
+      this.$emit('userLogout')
       this.$router.push({ name: 'Login' })
     },
     saveLayout: async function() {

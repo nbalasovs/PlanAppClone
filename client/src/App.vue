@@ -1,13 +1,16 @@
 <template>
   <div id="app">
     <Navbar 
-      v-if="this.$route.name !== 'Login'" 
+      v-if="this.$route.name !== 'Login'"
+      v-on:userLogout="cleanData()" 
       v-on:childToParent="onAddYearClick"
       v-on:courseAdded="fetchDataDelay()"
       :isHomeRoute="isHomeRoute()" />
     <router-view :componentObj="components" 
       :courses="courses" 
-      :dashboardData="dashboardData" 
+      :dashboardData="dashboardData"
+      v-on:accessDenied="makeToast('You have to have at least one course to be able to use dashboard functionality')"
+      v-on:updateData="fetchData()"
       v-on:courseRemoved="onCourseRemove" />
   </div>
 </template>
@@ -35,6 +38,11 @@ export default {
     onAddYearClick: function(value) {
       this.components = value
     },
+    cleanData: function() {
+      this.components = {}
+      this.courses = null
+      this.dashboardData = null
+    },
     fetchData: async function() {
       const courses = await axios.get(this.$store.state.apiURL + '/api/course/' + this.$store.state.userId)
       courses.data.sort((a, b) => {
@@ -43,16 +51,24 @@ export default {
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
       })
       this.courses = courses.data
-      const credits = this.courses.filter(el => {
-        return el.spec.isPassed
-      }).map(el => el.data.credits).reduce((a, b) => a + b)
+
+      const creditsArr = this.courses.filter(el => el.spec.isPassed)
+      var credits = null
+
+      if(creditsArr.length > 0) {
+        credits = creditsArr.map(el => el.data.credits).reduce((a, b) => a + b)
+      } else {
+        credits = 0
+      }
+
       const names = this.courses.sort((a, b) => a.spec.grade - b.spec.grade).filter(el => el.spec.grade !== 0)
       .map(el => el.data.name)
+
       const grades = this.courses.sort((a, b) => a.spec.grade - b.spec.grade).filter(el => el.spec.grade !== 0)
       .map(el => el.spec.grade)
 
       this.dashboardData = {
-        creditsOverview: (credits >= 180) ? [180] : [credits, 180 - credits],
+        creditsOverview: (credits >= 180) ? [180] : ([credits, 180 - credits]),
         boxPlotData: {
           names: names,
           grades: grades
@@ -67,25 +83,25 @@ export default {
       const years = this.components.years
       this.fetchDataDelay()
 
-      for (const [i, year] of years.entries()) {
-        idx = year.state.findIndex(el => String(el.i) === String(value))
-        if(idx !== -1) idx = i; break
-      }
+      if(years) {
+        for (const [i, year] of years.entries()) {
+          idx = year.state.findIndex(el => String(el.i) === String(value))
+          if(idx !== -1) idx = i; break
+        }
 
-      if(idx !== -1) {
-        const state = this.components.years[idx].state
-        const stateSubset = state.filter(el => String(el.i) !== String(value))
-        years[idx].state = stateSubset
+        if(idx !== -1) {
+          const state = this.components.years[idx].state
+          const stateSubset = state.filter(el => String(el.i) !== String(value))
+          years[idx].state = stateSubset
+        }
       }
     }
   },
   beforeCreate: function() {
     this.$store.dispatch('authenticate')
   },
-  created() {
-    if(this.$store.state.userId !== null) {
-      this.fetchData()
-    }
+  created: function() {
+    if(this.$store.state.userId) this.fetchData()
   }
 }
 </script>

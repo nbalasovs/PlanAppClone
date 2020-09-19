@@ -12,7 +12,6 @@ export default new Vuex.Store({
     userId: null,
     isAdmin: null,
     startYear: null,
-    courses: null
   },
   mutations: {
     authenticate(state) {
