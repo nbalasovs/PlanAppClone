@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="col-md-12">
-      <b-table striped hover :items="items">
+      <b-table striped hover :items="items" responsive>
         <template v-slot:cell(status)="data">
           <b-badge :variant="data.value ? 'success' : 'warning'">{{ data.value ? 'Passed' : 'Failed' }}</b-badge>
         </template>
